@@ -19,10 +19,10 @@ public class TSPBruteForce {
         /* define constants */
         static long MAXVALUE =  2000000000;
         static long MINVALUE = -2000000000;
-        static int numberOfTrials = 1;
+        static int numberOfTrials = 15;
         static int MAXINPUTSIZE  = (int) Math.pow(1.5,28);
         static int MININPUTSIZE  =  1;
-        static int Nums = 1;
+        static int Nums = 12;
         static long fibResult = 0;
         // static int SIZEINCREMENT =  10000000; // not using this since we are doubling the size each time
 
@@ -57,11 +57,11 @@ public class TSPBruteForce {
             // run the whole experiment at least twice, and expect to throw away the data from the earlier runs, before java has fully optimized
 
             System.out.println("Running first full experiment...");
-            runFullExperiment("greedySalesman-Exp1-ThrowAway.txt");
+            runFullExperiment("TSPBruteForce-Exp1-ThrowAway.txt");
             System.out.println("Running second full experiment...");
-            runFullExperiment("greedySalesman-Exp2.txt");
+            runFullExperiment("TSPBruteForce-Exp2.txt");
             System.out.println("Running third full experiment...");
-            runFullExperiment("greedySalesman-Exp3.txt");
+            runFullExperiment("TSPBruteForce-Exp3.txt");
         }
 
         static void runFullExperiment(String resultsFileName){
@@ -70,11 +70,11 @@ public class TSPBruteForce {
             double currentAv = 0;
             double doublingTotal = 0;
             int x = 0;
-            int angle = 60;
-            int r = 12;
+            int angle = 40;
+            int r = 100;
             int n = 360/angle;
 
-            double[][] costMatrix =  GenerateRandomCircularGraphCostMatrix(n, r, angle);
+            double[][] costMatrix2 =  GenerateRandomCircularGraphCostMatrix(n, r, angle);
             //double[][] costMatrix = GenerateRandomCostMatrix(25);
             //double[][] costMatrix = GenerateRandomEuclideanCostMatrix(5);
             // If the array is empty
@@ -82,9 +82,9 @@ public class TSPBruteForce {
             // return the original array
             //PathMatrix.travelNodes = removeElements(PathMatrix.travelNodes);
 
-            int[] bestPath =  bruteForceTSP(costMatrix);
+            int[] bestPath =  bruteForceTSP(costMatrix2);
 
-            System.out.println(Arrays.toString(bestPath));
+            //System.out.println(Arrays.toString(bestPath));
 
             //GenerateRandomCostMatrix(5);
             //GenerateRandomEuclideanCostMatrix(5);
@@ -102,11 +102,11 @@ public class TSPBruteForce {
             ThreadCpuStopWatch TrialStopwatch = new ThreadCpuStopWatch(); // for timing an individual trial
 
             //add headers to text file
-            resultsWriter.println("#X(Value)  N(Size)  AverageTime        FibNumber   NumberOfTrials"); // # marks a comment in gnuplot data
+            resultsWriter.println("#X(Value)  N(Size)  AverageTime    NumberOfTrials"); // # marks a comment in gnuplot data
             resultsWriter.flush();
 
             /* for each size of input we want to test: in this case starting small and doubling the size each time */
-            for(int inputSize=0;inputSize<=Nums; inputSize++) {
+            for(int inputSize=1;inputSize<=Nums; inputSize++) {
                 //test run for fibonacci numbers
                 //verifyGreedySalesman(inputSize);
 
@@ -122,6 +122,8 @@ public class TSPBruteForce {
 
                 //generate random integer list
                 //long resultFib = Fib(x);
+               // double[][] costMatrix2 = new double[][]{};
+                //costMatrix2 = GenerateRandomEuclideanCostMatrix(inputSize);
 
                 //print progress to screen
                 //System.out.println("...done.");
@@ -145,7 +147,9 @@ public class TSPBruteForce {
 
                     //TrialStopwatch.start(); // *** uncomment this line if timing trials individually
                     /* run the function we're testing on the trial input */
+                    int[] bestPath2 =  bruteForceTSP(costMatrix2);
 
+                    System.out.println(Arrays.toString(bestPath2));
                     //fibResult = Greedy(inputSize);
                     //System.out.println(result);
                     // batchElapsedTime = batchElapsedTime + TrialStopwatch.elapsedTime(); // *** uncomment this line if timing trials individually
@@ -158,13 +162,13 @@ public class TSPBruteForce {
 
                 //skip this round if this is the first one (no previous average for calculation)
                 if(inputSize != 0){
-                    doublingTotal = averageTimePerTrialInBatch/averageArray[x-1]; //Calculate doubling ratio
+                   // doublingTotal = averageTimePerTrialInBatch/averageArray[x-1]; //Calculate doubling ratio
 
                 }
                 x++;
                 int countingbits = countBits(inputSize);
                 /* print data for this size of input */
-                resultsWriter.printf("%6d %6d %15.2f %20d %4d\n",inputSize, countingbits, averageTimePerTrialInBatch, fibResult, numberOfTrials); // might as well make the columns look nice
+                resultsWriter.printf("%6d %6d %15.2f %4d\n",inputSize, countingbits, averageTimePerTrialInBatch, numberOfTrials); // might as well make the columns look nice
                 resultsWriter.flush();
                 System.out.println(" ....done.");
             }
