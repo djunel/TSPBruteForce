@@ -74,8 +74,9 @@ public class TSPBruteForce {
             int r = 12;
             int n = 360/angle;
 
-            //double[][] costMatrix =  GenerateRandomCircularGraphCostMatrix(n, r, angle);
-            double[][] costMatrix = GenerateRandomCostMatrix(25);
+            double[][] costMatrix =  GenerateRandomCircularGraphCostMatrix(n, r, angle);
+            //double[][] costMatrix = GenerateRandomCostMatrix(25);
+            //double[][] costMatrix = GenerateRandomEuclideanCostMatrix(5);
             // If the array is empty
             // or the index is not in array range
             // return the original array
@@ -231,8 +232,8 @@ public class TSPBruteForce {
             return  randomCostMatrix;
         }
 
-        public static long[][] GenerateRandomEuclideanCostMatrix(int n){
-            long[][] randomEuclideanCostMatrix = new long[n][n];
+        public static double[][] GenerateRandomEuclideanCostMatrix(int n){
+            double[][] randomEuclideanCostMatrix = new double[n][n];
             vertex[] v = new vertex[n];
             for(int s = 0; s<v.length; s++){
                 v[s] = new vertex();
@@ -368,14 +369,14 @@ public class TSPBruteForce {
 
             double cost = 0;
 
-            // Compute the cost of going to each city
+
             for (int i = 1; i < matrix.length; i++) {
                 int from = tour[i - 1];
                 int to = tour[i];
                 cost += matrix[from][to];
             }
 
-            // Compute the cost to return to the starting city
+
             int last = tour[matrix.length - 1];
             int first = tour[0];
             return cost + matrix[last][first];
